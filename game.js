@@ -223,8 +223,8 @@ function text(s, x, y, size, col = '#fff', align = 'center', stroke = true) {
 }
 function drawTree(c, y) {
   ctx.fillStyle = '#7a4a22'; ctx.fillRect(c * T + 20, y + 28, 8, 16);
-  ctx.fillStyle = '#2f8f3a'; ctx.beginPath(); ctx.arc(c * T + 24, y + 22, 17, 0, 7); ctx.fill();
-  ctx.fillStyle = '#3fae4a'; ctx.beginPath(); ctx.arc(c * T + 19, y + 17, 8, 0, 7); ctx.fill();
+  ctx.fillStyle = '#2f8f3a'; ctx.beginPath(); ctx.arc(c * T + 24, y + 23, 17, 0, 7); ctx.fill();
+  ctx.fillStyle = '#3fae4a'; ctx.beginPath(); ctx.arc(c * T + 19, y + 18, 8, 0, 7); ctx.fill();
 }
 function drawRow(row, r) {
   const y = rowY(r);
