@@ -246,7 +246,11 @@ function drawRow(row, r) {
         if (!open) { ctx.fillStyle = '#c0392b'; ctx.fillRect(c * T + 6, y + 12, 36, 6); ctx.fillRect(c * T + 6, y + 28, 36, 6); } }
       else { ctx.fillStyle = '#a5732f'; ctx.fillRect(c * T, y + 14, T, 6); ctx.fillRect(c * T, y + 30, T, 6);
         ctx.fillStyle = '#7a4a22'; ctx.fillRect(c * T + 4, y + 6, 8, 36); ctx.fillRect(c * T + 36, y + 6, 8, 36); } } }
-  row.trees.forEach(c => drawTree(c, y));
+   row.trees.forEach(c => {
+    // Skip trees on gate/plate columns so they don't visually block the gate.
+    if ((row.gate && row.gate.cols.includes(c)) || (row.plates && row.plates.includes(c))) return;
+    drawTree(c, y);
+  });
   row.coins.forEach(c => { const b = Math.sin(clock * 5 + c) * 3;
     ctx.fillStyle = '#ffcf33'; ctx.beginPath(); ctx.ellipse(c * T + 24, y + 24 + b, 9, 11, 0, 0, 7); ctx.fill();
     ctx.strokeStyle = '#b8860b'; ctx.lineWidth = 2; ctx.stroke(); });
