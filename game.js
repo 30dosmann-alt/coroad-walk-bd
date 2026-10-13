@@ -62,6 +62,13 @@ function scatter(row, nT, nC, free) {
   for (let i = 0; i < nT; i++) { const c = ri(0, COLS - 1); if (!free || !free.includes(c)) row.trees.add(c); }
   for (let i = 0; i < nC; i++) { const c = ri(0, COLS - 1); if (!row.trees.has(c)) row.coins.add(c); }
 }
+function addGrass(free) {
+  const r = mk('grass');
+  scatter(r, ri(2, 4), Math.random() < .5 ? 1 : 0, free);
+  if (free) for (const c of free) r.trees.delete(c);
+  push(r);
+}
+}
 function addGrass() { const r = mk('grass'); scatter(r, ri(2, 4), Math.random() < .5 ? 1 : 0); push(r); }
 function genSection() {
   g.sec++;
@@ -73,8 +80,7 @@ function genSection() {
     for (let i = 0; i < 4; i++) { const b = mk('bridge', { span }); scatter(b, 0, 0); if (Math.random() < .6) b.coins.add(ri(c0, c0 + 4)); push(b); }
     const last = mk('bridge', { span, plates: cols }); const pi2 = push(last);
     const gate2 = { cols, plateRow: pi2, openUntil: 0 }; last.gate = gate2; g.gates.push(gate2);
-    push(mk('fence', { gate: gate2 })); addGrass(); return;
-  }
+     push(mk('fence', { gate: gate2 })); addGrass(cols); return;
   const k = Math.random();
   if (k < .3) { addGrass(); if (Math.random() < .5) addGrass(); }
   else if (k < .65) {
@@ -246,7 +252,10 @@ function drawRow(row, r) {
         if (!open) { ctx.fillStyle = '#c0392b'; ctx.fillRect(c * T + 6, y + 12, 36, 6); ctx.fillRect(c * T + 6, y + 28, 36, 6); } }
       else { ctx.fillStyle = '#a5732f'; ctx.fillRect(c * T, y + 14, T, 6); ctx.fillRect(c * T, y + 30, T, 6);
         ctx.fillStyle = '#7a4a22'; ctx.fillRect(c * T + 4, y + 6, 8, 36); ctx.fillRect(c * T + 36, y + 6, 8, 36); } } }
-   row.trees.forEach(c => {
+    row.trees.forEach(c => {
+    if ((row.gate && row.gate.cols.includes(c)) || (row.plates && row.plates.includes(c))) return;
+    drawTree(c, y);
+  });
     // Skip trees on gate/plate columns so they don't visually block the gate.
     if ((row.gate && row.gate.cols.includes(c)) || (row.plates && row.plates.includes(c))) return;
     drawTree(c, y);
